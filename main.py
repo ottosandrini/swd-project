@@ -4,6 +4,7 @@ import streamlit as st
 from queries import find_devices
 from devices import Device
 
+
 st.write("# Gerätemanagement")
 st.write("## Was möchten sie gerne tun:")
 
