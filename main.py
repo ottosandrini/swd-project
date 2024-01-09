@@ -1,5 +1,5 @@
 import streamlit as st
-from queries import find_devices
+import queries
 from devices import Device
 
 # Eine Überschrift der ersten Ebene
@@ -14,7 +14,7 @@ current_device_example = st.selectbox(
     options = ["Gerät_A", "Gerät_B"], key="sbDevice_example")
 
 # Eine Auswahlbox mit Datenbankabfrage, das Ergebnis wird in current_device gespeichert
-devices_in_db = find_devices()
+devices_in_db = None
 
 if devices_in_db:
     current_device_name = st.selectbox(

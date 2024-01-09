@@ -4,17 +4,13 @@ import streamlit as st
 from queries import find_devices
 from devices import Device
 
-# Eine Überschrift der ersten Ebene
 st.write("# Gerätemanagement")
+st.write("## Was möchten sie gerne tun:")
 
-# Eine Überschrift der zweiten Ebene
-st.write("## Geräteauswahl")
+#multiple buttons going to different pages:
 
-# Eine Auswahlbox mit hard-gecoded Optionen, das Ergebnis wird in current_device_example gespeichert
-current_device_example = st.selectbox(
-    'Gerät auswählen',
-    options = ["Gerät_A", "Gerät_B"], key="sbDevice_example")
 
+"""
 # Eine Auswahlbox mit Datenbankabfrage, das Ergebnis wird in current_device gespeichert
 devices_in_db = find_devices()
 
@@ -43,3 +39,5 @@ if devices_in_db:
             loaded_device.store_data()
             st.write("Data stored.")
             st.rerun()
+"""
+#test
