@@ -1,6 +1,25 @@
 import streamlit as st
 
-user_data = []
+class UserManagementSystem:
+    def __init__(self):
+        self.user_data = []
+
+    def create_user(self, username, email, password):
+        new_user = {'Username': username, 'E-mail': email, 'Password': password}
+        self.user_data.append(new_user)
+        st.success(f"Nutzer '{username}' wurde erfolgreich angelegt!")
+
+    def show_saved_data(self):
+        if self.user_data:
+            st.write("Gespeicherte Nutzerdaten:")
+            for idx, user in enumerate(self.user_data, start=1):
+                st.write(f"Nutzer {idx}:")
+                st.write(user)
+        else:
+            st.write("Keine Nutzerdaten gespeichert.")
+
+# Create an instance of UserManagementSystem
+user_system = UserManagementSystem()
 
 with st.form("Nutzer Verwaltung - Neuen Nutzer anlegen"):
     st.write("Input user data ")
@@ -11,22 +30,8 @@ with st.form("Nutzer Verwaltung - Neuen Nutzer anlegen"):
     submitted = st.form_submit_button('Neuen Nutzer anlegen')
 
     if submitted:
-        #Showing  saved data
-        new_user = {
-            'Username': user_name,
-            'E-mail': user_email,
-            'Password': user_password  
-        }
+        # Create user using UserManagementSystem
+        user_system.create_user(user_name, user_email, user_password)
 
-        #appending the new user data
-        user_data.append(new_user)
-
-        #cofirmation message
-        st.success(f"Nutzer '{user_name}' wurde erfolgreich angelegt!")
-
-# showing user dafa out of the form
-if user_data:
-    st.write("Gespeicherte Nutzerdaten:")
-    for idx, user in enumerate(user_data, start=1):
-        st.write(f"Nutzer {idx}:")
-        st.write(user)
+# Show user data outside the form
+user_system.show_saved_data()
