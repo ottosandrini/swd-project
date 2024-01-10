@@ -1,4 +1,3 @@
-### Erste Streamlit App
 import streamlit as st
 from queries import find_devices
 from devices import Device
