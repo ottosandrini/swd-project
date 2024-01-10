@@ -1,6 +1,4 @@
 import streamlit as st
-from queries import find_devices
-from devices import Device
 
 def get_user():
     user="Bella"
