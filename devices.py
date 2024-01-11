@@ -43,7 +43,7 @@ class Device():
         result = cls.db_connector.search(DeviceQuery.device_name == device_name)
         if result:
             data = result[0]
-            return cls(data['device_name'], data['managed_by_user_id'])
+            return cls(data['device_name'], data['responsible_person'])
         else:
             return None
 
