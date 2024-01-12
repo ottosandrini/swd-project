@@ -5,53 +5,44 @@ from datetime import datetime
 from devices import Device
 
 class DeviceReservation(Device):
-    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
+    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('DeviceReservation')
 
-    def __init__(self, device_name: str, managed_by_user_id: str):
-        super().__init__(device_name, managed_by_user_id)
-        self.reservations_db = TinyDB('reservations.json')
-
-    def check_device_availability(self, date_to_check: str) -> bool:
-
-        check_date = datetime.strptime(date_to_check, "%Y-%m-%d")
+    def __init__(self, device: str, user: str, date: date):
+        self.device = device
+        self.user = user
+        self.date = date
+    def __dict__(self):
+        cls_dict = {"type":"reservation", "user":self.user, "date":self.date, "dev":self.device}
+        return cls_dict
+   
+    def check_device_availability(self) -> bool:
+        datetocheck = self.date
+        if datetocheck.weekday() in [5, 6]:  # Saturday = 5, Sunday = 6
+            return False  # Device is not available on weekends
+        else:
+            list_of_reservations = []
+            ReservationQuery = Query()
+            result = self.dbconnector.search(ReservationQuery.type == reservation)
+            for i in result:
+                if date_to_check == i:
+                    return False
+                else:
+                    return True
     
-        if check_date.weekday() in [5, 6]:  # Samstag = 5, Sonntag = 6
-            return False  # Gerät ist an Wochenenden nicht verfügbar
-        else:
-            return True  # Gerät ist an Wochentagen verfügbar
-
-
-    def reserve_device(self, user_id: str, reservation_date: str):
-        device_available = self.check_device_availability(reservation_date)
-
-        if not device_available:
-            return "User does not exist. Reservation failed."
-
-        # Check if the device exists
-        device_exists = self.check_device_availability(self.device_name)
-        if ndb_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')ot device_exists:
-            return "Device does not exist. Reservation failed."
-        if device_available:
-            reservation_details = {
-                'user_id': user_id,
-                'device_name': self.device_name,
-                'reservation_date': reservation_date
-            }
-
-            self.reservations_db.insert(reservation_details)
-            return "Gerät erfolgreich reserviert!"
-        else:
-            return "Gerät ist an diesem Datum nicht verfügbar!"
-
-    def check_user_existence(self, user_id: str) -> bool:
-        User = Query()
-        user_result = self.users_db.search(User.user_id == user_id)
-        return bool(user_result)  # Return True if user exists, False otherwise
-
-    def check_device_existence(self, device_name: str) -> bool:
+    def store_data(self):
+        print("Storing data...")
+        # Check if the device already exists in the database
         DeviceQuery = Query()
-        device_result = self.db_connector.search(DeviceQuery.device_name == device_name)
-        return bool(device_result)  # Return True if device exists, False otherwise
+        result = self.db_connector.search(DeviceQuery.device_name == self.device_name)
+        if result:
+            # Update the existing record with the current instance's data
+            result = self.db_connector.update(self.__dict__, doc_ids=[result[0].doc_id])
+            print("Data updated.")
+        else:
+            # If the device doesn't exist, insert a new record
+            self.db_connector.insert(self.__dict__)
+            print("Data inserted.")
+
 
     @classmethod
     def load_data_by_reservation_name(cls, rsv_name):
