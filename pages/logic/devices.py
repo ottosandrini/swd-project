@@ -1,3 +1,4 @@
+# our version of devices.py
 import os
 from tinydb import TinyDB, Query
 from serializer import serializer
@@ -47,6 +48,10 @@ class Device():
             return cls(data['device_name'], data['managed_by_user_id'])
         else:
             return None
+
+
+############################################################################################
+############################################################################################
 
 
 class DeviceReservation(Device):
