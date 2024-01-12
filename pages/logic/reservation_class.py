@@ -11,6 +11,16 @@ class DeviceReservation(Device):
         super().__init__(device_name, managed_by_user_id)
         self.reservations_db = TinyDB('reservations.json')
 
+    def check_device_availability(self, date_to_check: str) -> bool:
+
+        check_date = datetime.strptime(date_to_check, "%Y-%m-%d")
+    
+        if check_date.weekday() in [5, 6]:  # Samstag = 5, Sonntag = 6
+            return False  # Gerät ist an Wochenenden nicht verfügbar
+        else:
+            return True  # Gerät ist an Wochentagen verfügbar
+
+
     def reserve_device(self, user_id: str, reservation_date: str):
         device_available = self.check_device_availability(reservation_date)
 
@@ -32,15 +42,6 @@ class DeviceReservation(Device):
             return "Gerät erfolgreich reserviert!"
         else:
             return "Gerät ist an diesem Datum nicht verfügbar!"
-
-    def check_device_availability(self, date_to_check: str) -> bool:
-
-        check_date = datetime.strptime(date_to_check, "%Y-%m-%d")
-        
-        if check_date.weekday() in [5, 6]:  # Samstag = 5, Sonntag = 6
-            return False  # Gerät ist an Wochenenden nicht verfügbar
-        else:
-            return True  # Gerät ist an Wochentagen verfügbar
 
     def check_user_existence(self, user_id: str) -> bool:
         User = Query()
