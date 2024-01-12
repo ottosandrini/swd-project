@@ -1,3 +1,4 @@
+# our version of devices.py
 import os
 from tinydb import TinyDB, Query
 from serializer import serializer
@@ -7,7 +8,7 @@ from datetime import datetime
 class Device():
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
 
-    def __init__(self, device_name: str, responsible_person: str, creation_date=datetime.now(), end_of_life, next_maintenance, maintenance_interval, maintenance_cost):
+    def __init__(self, device_name: str, responsible_person: str, end_of_life, next_maintenance, maintenance_interval, maintenance_cost, creation_date=datetime.now()):
         self.device_name = device_name
         self.responsible_person = responsible_person
         self.creation_date = creation_date
