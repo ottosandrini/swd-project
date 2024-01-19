@@ -4,21 +4,28 @@ from tinydb import TinyDB, Query
 from serializer import serializer
 from datetime import datetime
 
-
 class Device():
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
 
-    def __init__(self, device_name: str, responsible_person: str, end_of_life, next_maintenance, maintenance_interval, maintenance_cost, creation_date=datetime.now()):
+    def __init__(self, id: int, device_name: str, responsible_person: str, last_update:datetime, creation_date: datetime, end_of_life:datetime, first_maintenance:datetime,
+                next_maintenance:datetime, maintenance_interval:int, maintenance_cost:float):
+        self.id = id
         self.device_name = device_name
         self.responsible_person = responsible_person
-        self.creation_date = creation_date
+        self.__last_update = last_update
+        self.__creation_date = creation_date
         self.end_of_life = end_of_life
-        self.next_maintenance = next_maintenance() 
+        self.first_maintenance = first_maintenance
+        self.next_maintenance = next_maintenance
         self.maintenance_interval = maintenance_interval
         self.maintenance_cost = maintenance_cost
 
     def __str__(self):
-        return f'Device {self.device_name} ({self.responsible_person})'
+        formatted_string = (f'Device {self.id} {self.device_name} ({self.responsible_person}), '
+                            f'{self.__last_update}, {self.__creation_date}, {self.end_of_life},\n '
+                            f'{self.first_maintenance}, {self.next_maintenance}, {self.maintenance_interval}, '
+                            f' {self.maintenance_cost}')
+        return formatted_string
 
     def __repr__(self):
         return self.__str__()
@@ -45,24 +52,47 @@ class Device():
 
         if result:
             data = result[0]
-            return cls(data['device_name'], data['managed_by_user_id'])
+            return cls(data["id"], data['device_name'], data['responsible_person'], data["_Device__last_update"], data["_Device__creation_date"], data["end_of_life"],
+                    data['first_maintenance'], data["next_maintenance"], data["maintenance_interval"], data["maintenance_cost"])
         else:
             return None
+        
+    @classmethod
+    def load_all_devices(cls):
+        device_query = Query()
+        result = cls.db_connector.all()
+        if result:
+            devices = []
+            for device_json in result:
+                device = cls(device_json["id"], device_json['device_name'], device_json['responsible_person'], device_json["_Device__last_update"], device_json["_Device__creation_date"],
+                            device_json["end_of_life"], device_json['first_maintenance'], device_json["next_maintenance"], device_json["maintenance_interval"], device_json["maintenance_cost"])
+                devices.append(device)
+            return devices
+        return None
+
 
 if __name__ == "__main__":
     # Beispiel für die Verwendung der Klassen
-    device1 = Device("Device1", "first@mci.edu")
-    device2 = Device("Device2", "second@mci.edu")
-    device3 = Device("Device3", "third@mci.edu")
+    device1 = Device(456443, "Device1", "first@mci.edu", datetime(2020, 12, 12), datetime(2020, 12, 12), datetime(2020, 12, 12), datetime(2020, 12, 12), datetime(2020, 12, 12),
+                    40, 450.5)
+    # device2 = Device("Device2", "second@mci.edu")
+    # device3 = Device("Device3", "third@mci.edu")
     device1.store_data()
-    device2.store_data()
+    # device2.store_data()
 
-    device3.store_data()
-    device4 = Device("Device3", "fourth@mci.edu")
-    device4.store_data()
+    # device3.store_data()
+    # device4 = Device("Device3", "fourth@mci.edu")
+    # device4.store_data()
 
-    loaded_device = Device.load_data_by_device_name('Device2')
-    if loaded_device:
-        print(f"Loaded Device: {loaded_device}")
+    loaded_device = Device.load_data_by_device_name('Device1')
+    all_loaded_devices = Device.load_all_devices()
+    # if loaded_device:
+    #     print(f"Loaded Device: {loaded_device}")
+    # else:
+    #     print("Device not found.")
+
+    if all_loaded_devices:
+        for loaded_device in all_loaded_devices:
+            print(loaded_device)
     else:
         print("Device not found.")
