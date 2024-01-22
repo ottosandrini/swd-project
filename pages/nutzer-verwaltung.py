@@ -8,6 +8,7 @@ from logic import nutzerverwaltung_class
 
 # Add these lines at the beginning of nutzer-verwaltung.py and nutzerverwaltung_class.py
 
+
 ### !!! hab überall serializer.py umbennant  damit es keine Verwirrung mit serializer entsteht aber hat nicht funktioniert deswegen  hab alles zurueckgekehrt!! 
 
 #user_data = []

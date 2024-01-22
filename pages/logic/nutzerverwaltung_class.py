@@ -5,6 +5,7 @@ from .serializer import serializer
 from datetime import datetime
 from .devices import Device
 
+
 #from devices.py store_data and load_data nehmen###
 ##
 
