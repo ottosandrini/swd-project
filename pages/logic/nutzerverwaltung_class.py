@@ -4,7 +4,9 @@ from tinydb import TinyDB, Query
 from .serializer import serializer
 from datetime import datetime
 from .devices import Device
-#from devices.py store_data and load_data nehmen
+
+#from devices.py store_data and load_data nehmen###
+##
 
 class NutzerVerwaltung(Device):
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('users')
