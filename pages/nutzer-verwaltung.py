@@ -3,8 +3,8 @@ import os
 import sys
 from tinydb import TinyDB, Query
 from datetime import datetime
-from logic.nutzerverwaltung_class import NutzerVerwaltung  # changed it due to fehlermeldung
-
+from logic import nutzerverwaltung_class  # changed it due to fehlermeldung
+from logic.nutzerverwaltung_class import NutzerVerwaltung
 #from logic import nutzerverwaltung_class
 
 
