@@ -3,13 +3,12 @@ import os
 import sys
 from tinydb import TinyDB, Query
 from datetime import datetime
-from logic.nutzerverwaltung_class import NutzerVerwaltung  # Adjust the import path accordingly
+from logic.nutzerverwaltung_class import NutzerVerwaltung  # changed it due to fehlermeldung
 
 #from logic import nutzerverwaltung_class
 
 
 # Add these lines at the beginning of nutzer-verwaltung.py and nutzerverwaltung_class.py
-
 
 ### !!! hab überall serializer.py umbennant  damit es keine Verwirrung mit serializer entsteht aber hat nicht funktioniert deswegen  hab alles zurueckgekehrt!! 
 
