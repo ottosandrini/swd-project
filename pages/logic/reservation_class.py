@@ -1,16 +1,17 @@
 import os
 from tinydb import TinyDB, Query
-from serializer import serializer
+from .serializer import serializer
 from datetime import datetime
-from devices import Device
+from .devices import Device
 
 class DeviceReservation(Device):
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('DeviceReservation')
 
-    def __init__(self, device: str, user: str, date: date):
+    def __init__(self, device: str, user: str, date: str, reason: str):
         self.device = device
         self.user = user
         self.date = date
+        self.reason = reason
     def __dict__(self):
         cls_dict = {"type":"reservation", "user":self.user, "date":self.date, "dev":self.device}
         return cls_dict

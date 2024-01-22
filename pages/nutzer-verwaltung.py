@@ -3,9 +3,7 @@ import os
 import sys
 from tinydb import TinyDB, Query
 from datetime import datetime
-from logic.serializer import serializer
-from logic.nutzerverwaltung_class import NutzerVerwaltung
-
+from logic import nutzerverwaltung_class
 #data_path = os.path.join(os.path.dirname('.\swd-project-2\pages\logic\nutzerverwaltung_class.py'), '..', 'nutzer-verwaltung.py')
 #file_path = os.path.join(os.path.dirname('.\\swd-project-2\\pages\\logic\\nutzerverwaltung_class.py'), '..', 'nutzer-verwaltung.py')
 
