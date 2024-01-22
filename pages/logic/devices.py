@@ -1,7 +1,7 @@
 # our version of devices.py
 import os
 from tinydb import TinyDB, Query
-from serializer import serializer
+from .serializer import serializer
 from datetime import datetime
 
 class Device():

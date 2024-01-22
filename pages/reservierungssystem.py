@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from logic import reservation_class 
 
 def get_user():
     user="Bella"
@@ -21,15 +22,14 @@ with col2:
 
     local_usr = get_user()
     st.header("Neue Reservierung")
-    list_of_available_devices=
+    list_of_available_devices=["dev1", "dev2"]
 
     chosen_device = st.selectbox(label="Wähle ein Gerät zum reservieren", options=list_of_available_devices)
-    chosen_start = st.date_input(label="Wähle ein Startdatum:")
-    chosen_end = st.date_input(label="Wähle ein Enddatum:")
+    chosen_date = st.date_input(label="Wähle ein Startdatum:")
     reason = st.text_input(label="Reservierungsgrund:")
 
     if st.button(label="Reservierung speichern", key="save_reservation"):
-        rsv = DeviceReservation(chosen_device, )
+        rsv = DeviceReservation(chosen_device, local_usr, chosen_date, reason)
         if rsv.check_device_availability():
             rsv.save_data()
         else:

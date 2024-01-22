@@ -1,9 +1,9 @@
 import streamlit as st
 import os
 from tinydb import TinyDB, Query
-from serializer import serializer
+from .serializer import serializer
 from datetime import datetime
-from devices import Device
+from .devices import Device
 #from devices.py store_data and load_data nehmen
 
 class NutzerVerwaltung(Device):
