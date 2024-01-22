@@ -13,7 +13,19 @@ class NutzerVerwaltung(Device):
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('users')
 
     def __init__(self, user_name: str, user_email: str, user_password: str):
-        super().__init__()  # Assuming Device class has an __init__ method
+        #super().__init__() 
+        super().__init__(
+            id=0,  
+            device_name='',  
+            responsible_person='',  
+            last_update=datetime.now(),  
+            creation_date=datetime.now(),  
+            end_of_life=datetime.now(),  
+            first_maintenance=datetime.now(),  
+            next_maintenance=datetime.now(),
+            maintenance_interval=0,  
+            maintenance_cost=0.0  
+        )
         self.user_name = user_name
         self.user_email = user_email
         self.user_password = user_password

@@ -3,7 +3,9 @@ import os
 import sys
 from tinydb import TinyDB, Query
 from datetime import datetime
-from logic import nutzerverwaltung_class
+from logic.nutzerverwaltung_class import NutzerVerwaltung  # Adjust the import path accordingly
+
+#from logic import nutzerverwaltung_class
 
 
 # Add these lines at the beginning of nutzer-verwaltung.py and nutzerverwaltung_class.py
