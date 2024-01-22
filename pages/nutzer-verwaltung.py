@@ -1,7 +1,23 @@
 import streamlit as st
+import os
+import sys
+from tinydb import TinyDB, Query
+from datetime import datetime
+from logic.serializer import serializer
+from logic.nutzerverwaltung_class import NutzerVerwaltung
 
-# Initialize an empty list to store user data
-user_data = []
+#data_path = os.path.join(os.path.dirname('.\swd-project-2\pages\logic\nutzerverwaltung_class.py'), '..', 'nutzer-verwaltung.py')
+#file_path = os.path.join(os.path.dirname('.\\swd-project-2\\pages\\logic\\nutzerverwaltung_class.py'), '..', 'nutzer-verwaltung.py')
+
+# Add these lines at the beginning of nutzer-verwaltung.py and nutzerverwaltung_class.py
+
+### !!! hab überall serializer.py umbennant  damit es keine Verwirrung mit serializer entsteht aber hat nicht funktioniert deswegen alle hab alles zurueckgekehrt!! 
+
+#user_data = []
+
+# Load user data from the database
+db = TinyDB('user_database.json')
+user_data = db.all()
 
 with st.form("Nutzer Verwaltung - Neuen Nutzer anlegen"):
     st.write("Input user data ")
@@ -11,9 +27,11 @@ with st.form("Nutzer Verwaltung - Neuen Nutzer anlegen"):
     submitted = st.form_submit_button('Neuen Nutzer anlegen')
 
     if submitted:
-        # Save submitted data
+        # Save submitted data to the database
         new_user = {'Username': user_name, 'E-mail': user_email, 'Password': user_password}
         user_data.append(new_user)
+        db.insert(new_user)
+
 
         # Display success message
         st.success(f"Nutzer '{user_name}' wurde erfolgreich angelegt!")
@@ -29,3 +47,9 @@ if user_data:
         st.write(user)
 else:
     st.write("Keine Nutzerdaten gespeichert.")
+
+if __name__ == "__main__":
+    if user_data:
+        # Instantiate NutzerVerwaltung with the last user's data
+        last_user = user_data[-1]
+        nutzer = NutzerVerwaltung(last_user['Username'], last_user['E-mail'], last_user['Password'])
