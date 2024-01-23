@@ -1,11 +1,17 @@
 import streamlit as st
+import os
+import sys
+from logic.devices import Device
 
 def is_user_active():
     if 'user_active' in st.session_state.keys() and st.session_state['user_active']:
         return True
     else:
         return False
-# if st.button('press here to edit'):
+
+all_devices = Device.load_all_devices()
+devices_names = [device.device_name for device in all_devices]
+
 if is_user_active():
     with st.form('form'):
         
@@ -28,6 +34,10 @@ if is_user_active():
             st.warning('cancelled')
         
 else:
+    devices_list = st.selectbox(
+        "Choose device to edit",
+        devices_names
+    )
     if st.button('Add device'):
         st.session_state['user_active']=True
         st.experimental_rerun()
