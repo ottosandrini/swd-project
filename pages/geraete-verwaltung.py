@@ -27,11 +27,15 @@ if is_user_active():
         maintenance_cost = st.number_input('maintenance cost', min_value=0, step=1)
 
         if st.form_submit_button('submit'):
-            st.text(f'{id},{name}')
-        #You can as well save your user input to a database and access later(sqliteDB will be nice)
-        st.success('updated successfully')
-        if st.form_submit_button('cancel'):
-            st.warning('cancelled')
+            st.text(f'{id},{name} saved')
+
+            device_from_input =  Device(id, name, responsible_person, last_update, creation_date, end_of_life,
+                first_maintenance, next_maintenance, maintenance_interval, maintenance_cost)
+            device_from_input.store_data()
+            st.session_state['user_active']=False
+
+        if st.form_submit_button('exit'):
+            st.session_state['user_active']=False
         
 else:
     devices_list = st.selectbox(
