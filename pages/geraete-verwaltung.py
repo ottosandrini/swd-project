@@ -46,6 +46,9 @@ if __name__ == "__main__":
                 #if necessary field not filled
                 if not name or not id or not responsible_person:
                     st.warning(f"user, id or responsible person not filled in")
+                # check if id of new device already exists
+                elif id in [device.id for device in all_devices] and 'edited_device' not in st.session_state.keys():
+                    st.warning(f'Device with id {id} already exists')
                 # check if user exists
                 elif responsible_person not in [user["Username"] for user in users]:
                     st.warning(f"no user named {responsible_person}")
@@ -62,6 +65,8 @@ if __name__ == "__main__":
 
             if st.form_submit_button('exit'):
                 st.session_state['form_opened']=False
+                if 'edited_device' in st.session_state.keys():
+                        del st.session_state['edited_device']
                 st.rerun()
             
     else:
