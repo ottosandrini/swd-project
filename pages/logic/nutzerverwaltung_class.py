@@ -49,7 +49,7 @@ class NutzerVerwaltung(Device):
                 {'user_name': self.user_name, 'user_email': self.user_email, 'user_password': self.user_password}
             )
             print("Data inserted.")
-
+    
     @classmethod
     def load_data_by_user_name(cls, user_name):
         # Load data from the database and create an instance of the NutzerVerwaltung class
@@ -61,3 +61,27 @@ class NutzerVerwaltung(Device):
             return cls(data['user_name'], data['user_email'], data['user_password'])
         else:
             return None
+    @classmethod    
+    def delete_data(cls, condition=None):
+        # Delete data based on the specified condition or default to user_name
+        if condition is None:
+            condition = Query().user_name == cls.user_name
+
+        print("Deleting data...")
+
+        # Add a print statement to see the entire database content before deletion
+        all_data_before = cls.db_connector.all()
+        print("All Data Before Deletion:", all_data_before)
+
+        result = cls.db_connector.remove(condition)
+
+        if result:
+            print(f"Data deleted based on condition: {condition}")
+        else:
+            print(f"No data found based on condition: {condition}")
+
+        # Add a print statement to see the entire database content after deletion
+        all_data_after = cls.db_connector.all()
+        print("All Data After Deletion:", all_data_after)
+
+

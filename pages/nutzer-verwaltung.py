@@ -52,3 +52,37 @@ if __name__ == "__main__":
         # Instantiate NutzerVerwaltung with the last user's data
         last_user = user_data[-1]
         nutzer = NutzerVerwaltung(last_user['Username'], last_user['E-mail'], last_user['Password'])
+
+
+if st.button("Delete Data"):
+    # Get user name for deletion
+    delete_user_name = st.text_input("User Name for Deletion:")
+
+    # Print the user input
+    print("User Input for Deletion:", delete_user_name)
+
+    # Print the condition before deletion
+    condition = Query().user_name == delete_user_name
+    print("Deletion Condition Before:", condition)
+
+    # Check if the user exists before attempting deletion
+    existing_user = NutzerVerwaltung.load_data_by_user_name(delete_user_name)
+    
+    if existing_user:
+        # Print existing user data before deletion
+        print("Existing User Data Before Deletion:", existing_user.__dict__)
+
+        # Delete data using the existing user instance
+        existing_user.delete_data(condition=condition)
+
+        # Display success message
+        st.success(f"Nutzer '{delete_user_name}' wurde erfolgreich gelöscht!")
+
+        # Print existing user data after deletion
+        print("Existing User Data After Deletion:", existing_user.__dict__)
+    else:
+        st.warning(f"Nutzer '{delete_user_name}' existiert nicht.")
+
+    # Print the condition after user input
+    print("Deletion Condition After:", condition)
+ 
