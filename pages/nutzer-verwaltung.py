@@ -53,7 +53,7 @@ if __name__ == "__main__":
         last_user = user_data[-1]
         nutzer = NutzerVerwaltung(last_user['Username'], last_user['E-mail'], last_user['Password'])
 
-
+# deleting options not working idk why
 if st.button("Delete Data"):
     # Get user name for deletion
     delete_user_name = st.text_input("User Name for Deletion:")
