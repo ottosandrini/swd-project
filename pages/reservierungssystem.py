@@ -1,16 +1,23 @@
 import streamlit as st
 import pandas as pd
-from logic import reservation_class 
+from logic import reservation_class as rc
 
 def get_user():
     user="Bella"
     return user
 
+devices_in_db = rc.DeviceReservation.get_all_devices()
+reservations_in_db = rc.DeviceReservation.get_all_reservations()
+
 st.set_page_config(page_title="Reservierungssystem")
 col1, col2 = st.columns(2)
 
+dict_of_dates = {}
+if reservations_in_db:
+    for i in reservations_in_db:
+        dict_of_dates[i['dev']] = i['date']
+
 with col1:
-    dict_of_dates = {"Device 1": "8.1.2024", "Device 2":"9.1.2024", "Device 3":"10.1.2024", "Device 4":"11.1.2024"}
     df = pd.DataFrame(list(dict_of_dates.items()), columns=['device', 'reserved date'])
 
     st.header("Reservierungen")
@@ -22,16 +29,15 @@ with col2:
 
     local_usr = get_user()
     st.header("Neue Reservierung")
-    list_of_available_devices=["dev1", "dev2"]
 
-    chosen_device = st.selectbox(label="Wähle ein Gerät zum reservieren", options=list_of_available_devices)
-    chosen_date = st.date_input(label="Wähle ein Startdatum:")
+    chosen_device = st.selectbox(label="Wähle ein Gerät zum reservieren", options=devices_in_db)
+    chosen_date = st.date_input(label="Wähle ein datum:")
     reason = st.text_input(label="Reservierungsgrund:")
 
     if st.button(label="Reservierung speichern", key="save_reservation"):
-        rsv = DeviceReservation(chosen_device, local_usr, chosen_date, reason)
-        if rsv.check_device_availability():
-            rsv.save_data()
+        rsv = rc.DeviceReservation(chosen_device, local_usr, chosen_date, reason)
+        if rsv.check_device_availability(reservations_in_db):
+            rsv.store_data()
         else:
             st.error("Das Gerät ist für diesen Zeitraum schon gebucht")
 

@@ -4,55 +4,66 @@ from .serializer import serializer
 from datetime import datetime
 from .devices import Device
 
-class DeviceReservation(Device):
-    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('DeviceReservation')
+class DeviceReservation:
+    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
 
     def __init__(self, device: str, user: str, date: str, reason: str):
+        self.type = 'reservation'
         self.device = device
         self.user = user
         self.date = date
         self.reason = reason
-    def __dict__(self):
-        cls_dict = {"type":"reservation", "user":self.user, "date":self.date, "dev":self.device}
-        return cls_dict
    
-    def check_device_availability(self) -> bool:
+    def check_device_availability(self, res_list) -> bool:
         datetocheck = self.date
         if datetocheck.weekday() in [5, 6]:  # Saturday = 5, Sunday = 6
+            print("Weekend -- fail")
             return False  # Device is not available on weekends
         else:
             list_of_reservations = []
-            ReservationQuery = Query()
-            result = self.dbconnector.search(ReservationQuery.type == reservation)
-            for i in result:
-                if date_to_check == i:
-                    return False
-                else:
-                    return True
+            if res_list:
+                for i in res_list:
+                    if datetocheck == i['date']:
+                        return False
+                    else:
+                        return True
+            else:
+                print("No results")
+                return True
     
     def store_data(self):
         print("Storing data...")
-        # Check if the device already exists in the database
-        DeviceQuery = Query()
-        result = self.db_connector.search(DeviceQuery.device_name == self.device_name)
-        if result:
-            # Update the existing record with the current instance's data
-            result = self.db_connector.update(self.__dict__, doc_ids=[result[0].doc_id])
-            print("Data updated.")
-        else:
-            # If the device doesn't exist, insert a new record
-            self.db_connector.insert(self.__dict__)
-            print("Data inserted.")
+        self.db_connector.insert(self.__dict__)
+        print("Data inserted.")
 
 
     @classmethod
-    def load_data_by_reservation_name(cls, rsv_name):
-        # Load data from the database and create an instance of the Device class
-        DeviceQuery = Query()
-        result = cls.db_connector.search(DeviceQuery.device_name == device_name)
-
+    def get_all_reservations(cls):
+        reservations = []
+        reservationsQuery = Query()
+        result = cls.db_connector.all()
         if result:
-            data = result[0]
-            return cls(data['device_name'], data['managed_by_user_id'])
+            for i in result:
+                if 'type' in i:
+                    reservations.append(i)
+            return reservations
         else:
+            print("No reservations found!")
             return None
+        
+    @classmethod
+    def get_all_devices(cls):
+        devices = []
+        DeviceQuery = Query()
+        result = cls.db_connector.all()
+
+        if result:    
+            for i in result:
+                if i['device_name']:
+                    devices.append(i["device_name"])
+        else:
+            print("Nothing in the Databse")
+        return devices
+
+
+

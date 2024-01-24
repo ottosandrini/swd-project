@@ -1,4 +1,3 @@
-# our version of devices.py
 import os
 from tinydb import TinyDB, Query
 from .serializer import serializer
