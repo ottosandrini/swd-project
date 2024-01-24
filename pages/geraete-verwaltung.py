@@ -10,7 +10,11 @@ def is_user_active():
         return False
 
 all_devices = Device.load_all_devices()
-devices_names = [device.device_name for device in all_devices]
+devices_names = []
+if all_devices:
+    devices_names = [device.device_name for device in all_devices]
+else:
+    print("no devices found")
 
 if is_user_active():
     with st.form('form'):
@@ -38,10 +42,11 @@ if is_user_active():
             st.session_state['user_active']=False
         
 else:
-    devices_list = st.selectbox(
-        "Choose device to edit",
-        devices_names
-    )
+    if devices_names:
+        devices_list = st.selectbox(
+            "Choose device to edit",
+            devices_names
+        )
     if st.button('Add device'):
         st.session_state['user_active']=True
         st.experimental_rerun()
