@@ -5,7 +5,7 @@ from datetime import datetime
 from .devices import Device
 
 class DeviceReservation:
-    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
+    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('reservations')
 
     def __init__(self, device: str, user: str, date: str, reason: str):
         self.type = 'reservation'
@@ -53,9 +53,11 @@ class DeviceReservation:
         
     @classmethod
     def get_all_devices(cls):
+        db_connector2 = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
+        
         devices = []
         DeviceQuery = Query()
-        result = cls.db_connector.all()
+        result = db_connector2.all()
 
         if result:    
             for i in result:

@@ -12,13 +12,15 @@ reservations_in_db = rc.DeviceReservation.get_all_reservations()
 st.set_page_config(page_title="Reservierungssystem")
 col1, col2 = st.columns(2)
 
-dict_of_dates = {}
+names_list = []
+dates_list = []
 if reservations_in_db:
     for i in reservations_in_db:
-        dict_of_dates[i['dev']] = i['date']
+        names_list.append(i['device'])
+        dates_list.append(i['date'])
 
 with col1:
-    df = pd.DataFrame(list(dict_of_dates.items()), columns=['device', 'reserved date'])
+    df = pd.DataFrame({'device':names_list, 'reserved date':dates_list})
 
     st.header("Reservierungen")
 
