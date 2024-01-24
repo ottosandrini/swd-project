@@ -33,7 +33,7 @@ class Device():
         print("Storing data...")
         # Check if the device already exists in the database
         DeviceQuery = Query()
-        result = self.db_connector.search(DeviceQuery.device_name == self.device_name)
+        result = self.db_connector.search(DeviceQuery.id == self.id)
         if result:
             # Update the existing record with the current instance's data
             result = self.db_connector.update(self.__dict__, doc_ids=[result[0].doc_id])
