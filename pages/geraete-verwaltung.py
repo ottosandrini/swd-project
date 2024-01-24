@@ -26,7 +26,8 @@ if __name__ == "__main__":
             # check if new device is created or old one is edited
             if 'edited_device' in st.session_state.keys():
                 edited_device = Device.load_data_by_device_name(st.session_state['edited_device'])
-                id = edited_device.id
+                if edited_device:
+                    id = edited_device.id
                 st.text(f"You're editing {id}")
             else:
                 id = st.text_input('id')
