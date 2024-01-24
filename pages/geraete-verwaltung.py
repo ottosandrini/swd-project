@@ -17,7 +17,9 @@ def get_all_users():
 if __name__ == "__main__":
 
     all_devices = Device.load_all_devices()
-    devices_names = [device.device_name for device in all_devices]
+    devices_names = []
+    if all_devices:
+        devices_names = [device.device_name for device in all_devices]
     users = get_all_users()
 
     if is_form_opened():
@@ -48,8 +50,9 @@ if __name__ == "__main__":
                 if not name or not id or not responsible_person:
                     st.warning(f"user, id or responsible person not filled in")
                 # check if id of new device already exists
-                elif id in [device.id for device in all_devices] and 'edited_device' not in st.session_state.keys():
-                    st.warning(f'Device with id {id} already exists')
+                # elif all_devices:
+                #     if id in [device.id for device in all_devices] and 'edited_device' not in st.session_state.keys():
+                #         st.warning(f'Device with id {id} already exists')
                 # check if user exists
                 elif responsible_person not in [user["Username"] for user in users]:
                     st.warning(f"no user named {responsible_person}")
