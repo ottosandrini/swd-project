@@ -1,3 +1,4 @@
 newvenv
 __pycache__/
 pages/logic/database.json
+run.sh

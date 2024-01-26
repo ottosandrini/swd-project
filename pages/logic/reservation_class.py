@@ -13,24 +13,27 @@ class DeviceReservation:
         self.user = user
         self.date = date
         self.reason = reason
+
+    def check_weekday(self):
+        datetocheck = self.date
+        if datetocheck.weekday() in [5, 6]:  # Saturday = 5, Sunday = 6
+            print("Failed!    ---- not a weekday")
+            return False  # Device is not available on weekends
+        else:
+            return True
    
     def check_device_availability(self, res_list) -> bool:
         datetocheck = self.date
-        if datetocheck.weekday() in [5, 6]:  # Saturday = 5, Sunday = 6
-            print("Weekend -- fail")
-            return False  # Device is not available on weekends
+        list_of_reservations = []
+        if res_list:
+            for i in res_list:
+                if datetocheck == i['date'] and self.device == i['device']:
+                    print('not available')
+                    return False
+            return True
         else:
-            list_of_reservations = []
-            if res_list:
-                for i in res_list:
-                    if datetocheck == i['date']:
-                        return False
-                    else:
-                        return True
-            else:
-                print("No results")
-                return True
-    
+            return True
+
     def store_data(self):
         print("Storing data...")
         self.db_connector.insert(self.__dict__)
@@ -44,8 +47,7 @@ class DeviceReservation:
         result = cls.db_connector.all()
         if result:
             for i in result:
-                if 'type' in i:
-                    reservations.append(i)
+                reservations.append(i)    
             return reservations
         else:
             print("No reservations found!")
@@ -66,6 +68,8 @@ class DeviceReservation:
         else:
             print("Nothing in the Databse")
         return devices
-
-
-
+    
+    @classmethod
+    def delete_single_res(cls, deldevice, deldate):
+        allres = Query()
+        cls.db_connector.remove(allres.device == deldevice and allres.date == deldate)
