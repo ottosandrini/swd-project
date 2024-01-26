@@ -72,4 +72,5 @@ class DeviceReservation:
     @classmethod
     def delete_single_res(cls, deldevice, deldate):
         allres = Query()
-        cls.db_connector.remove(allres.device == deldevice and allres.date == deldate)
+        cls.db_connector.remove(allres.fragment({'device': deldevice, 'date': deldate}))
+        #cls.db_connector.remove(allres.device == deldevice and allres.date == deldate)
