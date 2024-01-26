@@ -15,8 +15,8 @@ from logic.nutzerverwaltung_class import NutzerVerwaltung
 #user_data = []
 
 # Load user data from the database
-db = TinyDB('user_database.json')
-user_data = db.all()
+#db = TinyDB('user_database.json')
+user_data = NutzerVerwaltung.db_connector.all()
 
 with st.form("Nutzer Verwaltung - Neuen Nutzer anlegen"):
     st.write("Input user data ")
@@ -29,7 +29,7 @@ with st.form("Nutzer Verwaltung - Neuen Nutzer anlegen"):
         # Save submitted data to the database
         new_user = {'Username': user_name, 'E-mail': user_email, 'Password': user_password}
         user_data.append(new_user)
-        db.insert(new_user)
+        NutzerVerwaltung.db_connector.insert(new_user)
 
 
         # Display success message
