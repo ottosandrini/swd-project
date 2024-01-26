@@ -30,7 +30,7 @@ if __name__ == "__main__":
                 edited_device = Device.load_data_by_device_name(st.session_state['edited_device'])
                 if edited_device:
                     id = edited_device.id
-                st.text(f"You're editing {id}")
+                    st.text(f"You're editing {id}")
             else:
                 id = st.text_input('id')
 
@@ -90,3 +90,6 @@ if __name__ == "__main__":
 
         if 'device_saved' in st.session_state.keys() and st.session_state['device_saved']:
             st.success('Device ' + st.session_state['name_of_saved_device'] + ' saved')
+            st.session_state['device_saved'] = False
+            if 'name_of_saved_device' in st.session_state.keys():
+                del st.session_state['name_of_saved_device']
