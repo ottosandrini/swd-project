@@ -1,6 +1,9 @@
 import os
 from tinydb import TinyDB, Query
-from .serializer import serializer
+if __name__ == "__main__":
+    from serializer import serializer
+else:
+    from .serializer import serializer
 from datetime import datetime
 
 class Device():
