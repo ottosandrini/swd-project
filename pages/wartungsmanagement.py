@@ -45,9 +45,9 @@ class Wartungskosten():
         result = None#cls.db_connector.search(cost_query.type == 'maintenance_cost')
         if result:
             pass
-            #for i in result:
-                #costs.append(i)
-            #return costs
+            for i in result:
+                costs.append(i)
+            return costs
         else:
             print("No maintenance costs found!")
             return None
@@ -56,6 +56,12 @@ class Wartungskosten():
         device_name = device_reservation.device_name
         device_data = next((device for device in devices_maintenance_costs if device['device_name'] == device_name), None)
         return device_data
+    
+    @classmethod
+    def get_quarter(cls, date):
+        quarter = (date.month - 1) // 3 + 1
+        return f"Q{quarter}"
+
     
 date = "2018-02-01" 
 
@@ -93,10 +99,26 @@ next_maintenance = choosen_device.next_maintenance
 
 #maintenance_cost = Wartungskosten(chosen_device, date, cost_input) 
 
-data_wartunssystem = {"maintenance cost": maintenance_cost,
-                      "next maintenance": next_maintenance
+data_wartunssystem = {"maintenance_cost": maintenance_cost,
+                      "next_maintenance": next_maintenance
                      }
 
 data_frame = pd.DataFrame([data_wartunssystem])
 st.table(data_frame)
+
+for entry in devices_maintenance_costs:
+    entry["next_maintenance"] = next_maintenance
+
+quarterly_costs = {}
+for entry in devices_maintenance_costs:
+    quarter = Wartungskosten.get_quarter(entry["next_maintenance"])
+    if quarter not in quarterly_costs:
+        quarterly_costs[quarter] = 0
+    quarterly_costs[quarter] += entry["maintenance_cost"] 
+
+quarterly_df = pd.DataFrame({"Quarter": list(quarterly_costs.keys()), "maintenance_cost": list(quarterly_costs.values())})
+
+st.write("Wartungskosten pro Quartal:")
+st.table(quarterly_df)
+
 
