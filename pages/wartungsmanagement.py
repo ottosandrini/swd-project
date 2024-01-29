@@ -77,18 +77,26 @@ print(reservations_in_db)
 choosen_device = Device.load_data_by_device_name(choosen_device_name)
 maintenance_cost = choosen_device.maintenance_cost
 next_maintenance = choosen_device.next_maintenance
-# df = pd.DataFrame(reservations_in_db)
+                                                                                    # df = pd.DataFrame(reservations_in_db)
 
-# df_selected_device = df[df['device'] == choosen_device_name]
-# df = pd.DataFrame(df_selected_device)
+                                                                                    # df_selected_device = df[df['device'] == choosen_device_name]
+                                                                                    # df = pd.DataFrame(df_selected_device)
 
-# st.table(df_selected_device)
+                                                                                    # st.table(df_selected_device)
 
 
-# cost_df = pd.DataFrame(reservations_in_db)
-# cost_df_selected_device = df[df['date'] == choosen_device_name]
-# df = pd.DataFrame(cost_df_selected_device)
-df = pd.DataFrame([maintenance_cost, next_maintenance])
-st.table(df)
+                                                                                    # cost_df = pd.DataFrame(reservations_in_db)
+                                                                                    # cost_df_selected_device = df[df['date'] == choosen_device_name]
+                                                                                    # df = pd.DataFrame(cost_df_selected_device)
+#df = pd.DataFrame([maintenance_cost, next_maintenance])
+#st.table(df)
 
 #maintenance_cost = Wartungskosten(chosen_device, date, cost_input) 
+
+data_wartunssystem = {"maintenance cost": maintenance_cost,
+                      "next maintenance": next_maintenance
+                     }
+
+data_frame = pd.DataFrame([data_wartunssystem])
+st.table(data_frame)
+
