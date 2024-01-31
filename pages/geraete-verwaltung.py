@@ -77,8 +77,9 @@ if __name__ == "__main__":
         col1, col2 = st.columns([3, 1])
 
         with col1:
-            devices_attr = [vars(device) for device in all_devices]
-            devices_table = st.table(devices_attr)
+            if all_devices:
+                devices_attr = [vars(device) for device in all_devices]
+                devices_table = st.table(devices_attr)
 
         with col2:
             selected_device = st.selectbox(
