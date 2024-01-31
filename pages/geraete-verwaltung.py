@@ -15,7 +15,7 @@ def get_all_users():
     
 
 if __name__ == "__main__":
-
+    st.set_page_config(layout='wide', page_title='Geräte Verwaltung')
     all_devices = Device.load_all_devices()
     devices_names = []
     if all_devices:
@@ -74,19 +74,29 @@ if __name__ == "__main__":
                 st.rerun()
             
     else:
-        selected_device = st.selectbox(
-            "Choose device to edit",
-            devices_names
-        )
+        col1, col2 = st.columns([3, 1])
 
-        if st.button('Edit'):
-            st.session_state['form_opened']=True
-            st.session_state['edited_device']=selected_device
-            st.rerun()
+        with col1:
+            devices_attr = [vars(device) for device in all_devices]
+            devices_table = st.table(devices_attr)
 
-        if st.button('Add device'):
-            st.session_state['form_opened']=True
-            st.rerun()
+        with col2:
+            selected_device = st.selectbox(
+                "Choose device to edit",
+                devices_names
+            )
+
+            if st.button('Edit'):
+                st.session_state['form_opened']=True
+                st.session_state['edited_device']=selected_device
+                st.rerun()
+
+            if st.button('Add device'):
+                st.session_state['form_opened']=True
+                st.rerun()
+
+            if st.button('Delete'):
+                pass
 
         if 'device_saved' in st.session_state.keys() and st.session_state['device_saved']:
             st.success('Device ' + st.session_state['name_of_saved_device'] + ' saved')
