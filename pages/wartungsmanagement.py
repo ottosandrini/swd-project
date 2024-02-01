@@ -15,12 +15,11 @@ devices_maintenance_costs = Device.db_connector.all()
 #print(devices_maintenance_costs)
 
 #devices_in_db =  Device.db_connector.load_data_by_device_name()#DeviceReservation.get_all_devices()
-# reservations_in_db = DeviceReservation.get_all_devices()
+# #reservations_in_db = DeviceReservation.get_all_devices()
 reservations_in_db = Device.load_all_devices()
 #print(reservations_in_db)
 
 class Wartungskosten():
-    #db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('devices')
 
     #db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logic/database.json'), storage=serializer).table('devices')
 
