@@ -24,7 +24,7 @@ class Wartungskosten():
 
     #db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logic/database.json'), storage=serializer).table('devices')
 
-    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logic\\database.json'), storage=myserializer.serializer).table('devices')
+    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logic/database.json'), storage=myserializer.serializer).table('devices')
 
     def __init__(self, device: str, date: str, cost: float):
         #self.type = 'device'
@@ -66,8 +66,10 @@ class Wartungskosten():
 date = "2018-02-01" 
 
 #check_=DeviceReservation.check_device_availability(reservations_in_db)
-
-choosen_device_name = st.selectbox(label="Wähle ein Gerät für die Wartungskosten", options=[i.device_name for i in reservations_in_db])
+reservations_names = []
+if reservations_in_db:
+    reservations_names = [reservation.device_name for reservation in reservations_in_db]
+choosen_device_name = st.selectbox(label="Wähle ein Gerät für die Wartungskosten", options=reservations_names)
 
 #chosen_device = st.selectbox(label="Wähle ein Gerät für die Wartungstermine", options=[i['type'] for i in reservations_in_db])
 
@@ -81,8 +83,10 @@ choosen_device_name = st.selectbox(label="Wähle ein Gerät für die Wartungskos
 
 print(reservations_in_db)
 choosen_device = Device.load_data_by_device_name(choosen_device_name)
-maintenance_cost = choosen_device.maintenance_cost
-next_maintenance = choosen_device.next_maintenance
+maintenance_cost, next_maintenance = '', ''
+if choosen_device:
+    maintenance_cost = choosen_device.maintenance_cost
+    next_maintenance = choosen_device.next_maintenance
                                                                                     # df = pd.DataFrame(reservations_in_db)
 
                                                                                     # df_selected_device = df[df['device'] == choosen_device_name]
@@ -100,8 +104,8 @@ next_maintenance = choosen_device.next_maintenance
 #maintenance_cost = Wartungskosten(chosen_device, date, cost_input) 
 
 data_wartunssystem = {"maintenance_cost": maintenance_cost,
-                      "next_maintenance": next_maintenance
-                     }
+    "next_maintenance": next_maintenance
+}
 
 data_frame = pd.DataFrame([data_wartunssystem])
 st.table(data_frame)

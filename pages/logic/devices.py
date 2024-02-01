@@ -61,7 +61,6 @@ class Device():
         
     @classmethod
     def load_all_devices(cls):
-        device_query = Query()
         result = cls.db_connector.all()
         if result:
             devices = []
@@ -71,6 +70,12 @@ class Device():
                 devices.append(device)
             return devices
         return None
+    
+    @classmethod
+    def delete_by_name(cls, name):
+        deviceQuery = Query()
+        result = cls.db_connector.remove(deviceQuery.device_name == name)
+        return result
 
 
 if __name__ == "__main__":

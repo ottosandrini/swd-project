@@ -1,6 +1,7 @@
 import streamlit as st
 from logic.devices import Device
 from tinydb import TinyDB
+import os
 
 def is_form_opened():
     if 'form_opened' in st.session_state.keys() and st.session_state['form_opened']:
@@ -9,8 +10,8 @@ def is_form_opened():
         return False
     
 def get_all_users():
-    db = TinyDB('user_database.json')
-    user_data = db.all()
+    db = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logic/database.json'))
+    user_data = db.table('users').all()
     return user_data
     
 
@@ -21,6 +22,9 @@ if __name__ == "__main__":
     if all_devices:
         devices_names = [device.device_name for device in all_devices]
     users = get_all_users()
+    user_names = []
+    if users:
+        user_names = [user["Username"] for user in users]
 
     if is_form_opened():
         with st.form('form'):
@@ -54,7 +58,7 @@ if __name__ == "__main__":
                 #     if id in [device.id for device in all_devices] and 'edited_device' not in st.session_state.keys():
                 #         st.warning(f'Device with id {id} already exists')
                 # check if user exists
-                elif responsible_person not in [user["Username"] for user in users]:
+                elif responsible_person not in user_names:
                     st.warning(f"no user named {responsible_person}")
                 else:
                     device_from_input =  Device(id, name, responsible_person, last_update, creation_date, end_of_life,
@@ -87,20 +91,30 @@ if __name__ == "__main__":
                 devices_names
             )
 
-            if st.button('Edit'):
-                st.session_state['form_opened']=True
-                st.session_state['edited_device']=selected_device
-                st.rerun()
+            if all_devices:
+                if st.button('Edit'):
+                    st.session_state['form_opened']=True
+                    st.session_state['edited_device']=selected_device
+                    st.rerun()
 
             if st.button('Add device'):
                 st.session_state['form_opened']=True
                 st.rerun()
 
             if st.button('Delete'):
-                pass
+                result = Device.delete_by_name(selected_device)
+                device_index = result[0]-1
+                if device_index < len(devices_names):
+                    st.session_state['deleted_device'] = devices_names[device_index]
+                st.rerun()
 
         if 'device_saved' in st.session_state.keys() and st.session_state['device_saved']:
             st.success('Device ' + st.session_state['name_of_saved_device'] + ' saved')
             st.session_state['device_saved'] = False
             if 'name_of_saved_device' in st.session_state.keys():
                 del st.session_state['name_of_saved_device']
+        
+        if 'deleted_device' in st.session_state.keys():
+            st.success('Device ' + st.session_state['deleted_device'] + ' deleted')
+            del st.session_state['deleted_device']
+
